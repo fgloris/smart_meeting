@@ -1,9 +1,6 @@
 package com.example.smart_meeting
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.*
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.FeaturedVideo
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -102,23 +99,54 @@ fun BottomNavigationBar(navController: NavHostController) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
-        items.forEach { item ->
-            NavigationBarItem(
-                icon = { Icon(item.icon, contentDescription = item.title) },
-                label = { Text(text = item.title) },
-                selected = currentRoute == item.route,
-                onClick = {
-                    navController.navigate(item.route) {
-                        navController.graph.startDestinationRoute?.let { route ->
-                            popUpTo(route) {
-                                saveState = true
-                            }
+        NavigationBarItem(
+            icon = { Icon(items[0].icon, contentDescription = items[0].title) },
+            label = { Text(text = items[0].title) },
+            selected = currentRoute == items[0].route,
+            onClick = {
+                navController.navigate(items[0].route) {
+                    navController.graph.startDestinationRoute?.let { route ->
+                        popUpTo(route) {
+                            saveState = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
                     }
+                    launchSingleTop = true
+                    restoreState = true
                 }
-            )
-        }
+            }
+        )
+
+        NavigationBarItem(
+            icon = { Icon(items[1].icon, contentDescription = items[1].title) },
+            selected = currentRoute == items[1].route,
+            onClick = {
+                navController.navigate(items[1].route) {
+                    navController.graph.startDestinationRoute?.let { route ->
+                        popUpTo(route) {
+                            saveState = true
+                        }
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
+        )
+
+        NavigationBarItem(
+            icon = { Icon(items[2].icon, contentDescription = items[2].title) },
+            label = { Text(text = items[2].title) },
+            selected = currentRoute == items[2].route,
+            onClick = {
+                navController.navigate(items[2].route) {
+                    navController.graph.startDestinationRoute?.let { route ->
+                        popUpTo(route) {
+                            saveState = true
+                        }
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
+        )
     }
 }

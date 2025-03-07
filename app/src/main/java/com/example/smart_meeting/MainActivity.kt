@@ -1,28 +1,15 @@
 package com.example.smart_meeting
 
-import android.animation.ObjectAnimator
-import android.os.Build
 import android.os.Bundle
-import android.view.View
-import android.view.ViewTreeObserver
-import android.view.WindowInsets
-import android.view.animation.AnticipateInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.annotation.RequiresApi
-import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.*
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -34,8 +21,6 @@ import com.example.smart_meeting.screens.SettingsDrawer
 import com.example.smart_meeting.ui.theme.Smart_meetingTheme
 import kotlinx.coroutines.launch
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.splashscreen.SplashScreenViewProvider
-import androidx.core.view.WindowCompat
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +48,8 @@ fun MainScreen() {
         drawerContent = {
             SettingsDrawer()
         },
-        drawerState = drawerState
+        drawerState = drawerState,
+        gesturesEnabled = drawerState.isOpen //无法通过滑动打开但可以点击空白处关闭
     ){
         Scaffold(
             topBar = {
