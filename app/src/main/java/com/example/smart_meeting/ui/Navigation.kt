@@ -1,6 +1,5 @@
 package com.example.smart_meeting
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -18,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,7 +25,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 
 sealed class BottomNavigationItem(val route: String, val label: String, val icon: ImageVector) {
     object Meetings : BottomNavigationItem("meetings", "会议", Icons.Default.AddCircle)
@@ -38,18 +35,18 @@ sealed class BottomNavigationItem(val route: String, val label: String, val icon
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopNavigationBar(navController: NavHostController,
-                     currentRoute:  String?,
+                     currentIndex: Int,
                      onSettingsClick: () -> Unit,
                      onScannerClick: () -> Unit
 ) {
     TopAppBar(
         title = {
-            if (currentRoute != BottomNavigationItem.Profile.route){
+            if (currentIndex != 2){
                 Text(text = "你好")
             }
         },
         navigationIcon = {
-            if (currentRoute == BottomNavigationItem.Profile.route) {
+            if (currentIndex == 2) {
                 IconButton(onClick = {}
                 ) {
                     Icon(
@@ -75,7 +72,7 @@ fun TopNavigationBar(navController: NavHostController,
             }
         },
         actions = {
-            if (currentRoute == BottomNavigationItem.Profile.route){
+            if (currentIndex == 2){
                 IconButton(onClick =  onScannerClick) {
                     Icon(
                         imageVector = Icons.Default.QrCodeScanner,
@@ -105,7 +102,8 @@ fun TopNavigationBar(navController: NavHostController,
 }
 
 @Composable
-fun BottomNavigationBar(navController: NavHostController) {
+fun BottomNavigationBar(selectedIndex: Int,
+                        onPageSelected: (Int) -> Unit) {
     val items = listOf(
         BottomNavigationItem.Features,
         BottomNavigationItem.Meetings,
@@ -118,11 +116,8 @@ fun BottomNavigationBar(navController: NavHostController) {
         containerColor = backgroundColor,
     )
     {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
         items.forEachIndexed { index, item ->
-            val selected = currentRoute == item.route
-
+            val selected = selectedIndex == index
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
@@ -131,12 +126,7 @@ fun BottomNavigationBar(navController: NavHostController) {
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null
                     ) {
-                        if (currentRoute != item.route) {
-                            navController.navigate(item.route) {
-                                popUpTo(navController.graph.startDestinationId)
-                                launchSingleTop = true
-                            }
-                        }
+                        onPageSelected(index)
                     }
             ) {
                 Icon(

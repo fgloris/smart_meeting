@@ -5,12 +5,18 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.*
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.navigation.compose.NavHost
@@ -25,6 +31,8 @@ import com.example.smart_meeting.ui.theme.Smart_meetingTheme
 import kotlinx.coroutines.launch
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import kotlin.math.absoluteValue
+
+data class Ref<T>(var value: T)
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,8 +51,13 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+
+    // 创建共享的页面索引状态
+    var currentPageIndex by remember { mutableStateOf(0) }
+    val scope = rememberCoroutineScope()
+
+    // 页面列表
     val pages = remember {
         listOf(
             BottomNavigationItem.Features,
@@ -52,24 +65,42 @@ fun MainScreen() {
             BottomNavigationItem.Profile
         )
     }
-    var currentIndex = remember(currentRoute) {
-        pages.indexOfFirst { it.route == currentRoute }
+
+    // 监听导航变化
+    LaunchedEffect(navController) {
+        navController.currentBackStackEntryFlow.collect { entry ->
+            // 更新currentPageIndex以匹配当前路由
+            val route = entry.destination.route
+            val index = pages.indexOfFirst { it.route == route }
+            if (index != -1) {
+                currentPageIndex = index
+            }
+        }
     }
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
+
+    // 页面切换函数
+    fun navigateToPage(index: Int) {
+        if (index in pages.indices && index != currentPageIndex) {
+            currentPageIndex = index
+            navController.navigate(pages[index].route) {
+                popUpTo(navController.graph.startDestinationId)
+                launchSingleTop = true
+            }
+        }
+    }
 
     ModalNavigationDrawer(
         drawerContent = {
             SettingsDrawer()
         },
         drawerState = drawerState,
-        gesturesEnabled = drawerState.isOpen //无法通过滑动打开但可以点击空白处关闭
-    ){
+        gesturesEnabled = false
+    ) {
         Scaffold(
             topBar = {
                 TopNavigationBar(
                     navController = navController,
-                    currentRoute = currentRoute,
+                    currentIndex = currentPageIndex,
                     onSettingsClick = {
                         scope.launch {
                             drawerState.apply {
@@ -82,52 +113,54 @@ fun MainScreen() {
                     }
                 )
             },
-            bottomBar = { BottomNavigationBar(navController = navController) }
+            bottomBar = {
+                BottomNavigationBar(
+                    selectedIndex = currentPageIndex,
+                    onPageSelected = { index -> navigateToPage(index) }
+                )
+            }
         ) { innerPadding ->
-            NavHost(
-                navController = navController,
-                startDestination = BottomNavigationItem.Meetings.route,
-                modifier = Modifier.padding(innerPadding)
-                                    .pointerInput(Unit) {
-                    var dragStart = 0f
-                    var dragDistance = 0f
+            Box(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .pointerInput(Unit) {
+                        var dragStart = 0f
+                        var dragDistance = 0f
 
-                    detectHorizontalDragGestures(
-                        onDragStart = { dragStart = 0f },
-                        onDragEnd = {
-                            if (dragDistance.absoluteValue > 10f) { // 滑动超过30%时触发页面切换
-                                if (dragDistance < 0 && currentIndex < pages.size-1) {
-                                    navController.navigate(pages[currentIndex+1].route) {
-                                        popUpTo(navController.graph.startDestinationId)
-                                        launchSingleTop = true
+                        detectHorizontalDragGestures(
+                            onDragStart = { dragStart = 0f },
+                            onDragEnd = {
+                                if (dragDistance.absoluteValue > 10f) {
+                                    val nextIndex = if (dragDistance > 0) {
+                                        (currentPageIndex - 1).coerceAtLeast(0)
+                                    } else {
+                                        (currentPageIndex + 1).coerceAtMost(pages.size - 1)
                                     }
-                                    currentIndex+=1
-                                }else if (dragDistance > 0 && currentIndex > 0) {
-                                    navController.navigate(pages[currentIndex-1].route) {
-                                        popUpTo(navController.graph.startDestinationId)
-                                        launchSingleTop = true
-                                    }
-                                    currentIndex-=1
+                                    navigateToPage(nextIndex)
                                 }
+                                dragDistance = 0f
+                            },
+                            onDragCancel = {
+                                dragDistance = 0f
+                            },
+                            onHorizontalDrag = { change, dragAmount ->
+                                change.consume()
+                                dragDistance += dragAmount
                             }
-                            dragDistance = 0f
-                        },
-                        onDragCancel = {
-                            dragDistance = 0f
-                        },
-                        onHorizontalDrag = { change, dragAmount ->
-                            change.consume()
-                            dragDistance += dragAmount
-                        }
-                    )
-                }
+                        )
+                    }
             ) {
-                composable(BottomNavigationItem.Meetings.route) { MeetingsScreen() }
-                composable(BottomNavigationItem.Features.route) { FeaturesScreen() }
-                composable(BottomNavigationItem.Profile.route) { ProfileScreen() }
+                NavHost(
+                    navController = navController,
+                    startDestination = pages[1].route,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    composable(BottomNavigationItem.Meetings.route) { MeetingsScreen() }
+                    composable(BottomNavigationItem.Features.route) { FeaturesScreen() }
+                    composable(BottomNavigationItem.Profile.route) { ProfileScreen() }
+                }
             }
         }
     }
-
 }
 
