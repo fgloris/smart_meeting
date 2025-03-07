@@ -44,15 +44,20 @@ fun TopNavigationBar(navController: NavHostController,
 ) {
     TopAppBar(
         title = {
-            Text(
-                text = when(currentRoute) {
-                    BottomNavigationItem.Profile.route -> ""
-                    else -> "你好"
-                }
-            )
+            if (currentRoute != BottomNavigationItem.Profile.route){
+                Text(text = "你好")
+            }
         },
         navigationIcon = {
-            if (currentRoute != BottomNavigationItem.Profile.route) {
+            if (currentRoute == BottomNavigationItem.Profile.route) {
+                IconButton(onClick = {}
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Notifications,
+                        contentDescription = "用户"
+                    )
+                }
+            } else {
                 IconButton(onClick = {
                     navController.navigate(BottomNavigationItem.Profile.route){
                         popUpTo(navController.graph.startDestinationId) {
@@ -70,7 +75,13 @@ fun TopNavigationBar(navController: NavHostController,
             }
         },
         actions = {
-            if (currentRoute != BottomNavigationItem.Profile.route){
+            if (currentRoute == BottomNavigationItem.Profile.route){
+                IconButton(onClick =  onScannerClick) {
+                    Icon(
+                        imageVector = Icons.Default.QrCodeScanner,
+                        contentDescription = "设置"
+                    )
+                }
                 IconButton(onClick =  onSettingsClick) {
                     Icon(
                         imageVector = Icons.Default.Settings,
@@ -78,12 +89,6 @@ fun TopNavigationBar(navController: NavHostController,
                     )
                 }
             }else{
-                IconButton(onClick =  onScannerClick) {
-                    Icon(
-                        imageVector = Icons.Default.QrCodeScanner,
-                        contentDescription = "设置"
-                    )
-                }
                 IconButton(onClick =  onSettingsClick) {
                     Icon(
                         imageVector = Icons.Default.Settings,
