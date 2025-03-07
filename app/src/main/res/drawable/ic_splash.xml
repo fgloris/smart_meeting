@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- 这里放置你的应用图标矢量图 -->
+    <!-- 以下是一个简单的示例 -->
+    <path
+        android:fillColor="@color/primary"
+        android:pathData="M54,28L54,28A26,26 0,0 1,80 54L80,54A26,26 0,0 1,54 80L54,80A26,26 0,0 1,28 54L28,54A26,26 0,0 1,54 28z"/>
+</vector>
