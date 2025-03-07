@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
+import android.view.WindowInsets
 import android.view.animation.AnticipateInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -34,14 +35,14 @@ import com.example.smart_meeting.ui.theme.Smart_meetingTheme
 import kotlinx.coroutines.launch
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.splashscreen.SplashScreenViewProvider
+import androidx.core.view.WindowCompat
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val splashScreen = installSplashScreen()
-        
-
-        enableEdgeToEdge()
+        //val splashScreen = installSplashScreen()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        //enableEdgeToEdge()
         setContent {
             Smart_meetingTheme {
                 MainScreen()
