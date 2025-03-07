@@ -40,9 +40,8 @@ import androidx.core.view.WindowCompat
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //val splashScreen = installSplashScreen()
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        //enableEdgeToEdge()
+        val splashScreen = installSplashScreen()
+        enableEdgeToEdge()
         setContent {
             Smart_meetingTheme {
                 MainScreen()
@@ -77,6 +76,9 @@ fun MainScreen() {
                                 if (isClosed) open() else close()
                             }
                         }
+                    },
+                    onScannerClick = {
+
                     }
                 )
             },

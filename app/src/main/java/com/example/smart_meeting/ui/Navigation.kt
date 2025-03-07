@@ -3,6 +3,7 @@ package com.example.smart_meeting
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.*
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.FeaturedVideo
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -20,14 +21,18 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 sealed class BottomNavigationItem(val route: String, val title: String, val icon: ImageVector) {
-    object Meetings : BottomNavigationItem("meetings", "会议", Icons.Default.Create)
-    object Features : BottomNavigationItem("features", "功能", Icons.Default.Menu)
+    object Meetings : BottomNavigationItem("meetings", "会议", Icons.Default.AddCircle)
+    object Features : BottomNavigationItem("features", "功能", Icons.Default.ViewComfyAlt)
     object Profile : BottomNavigationItem("profile", "我的", Icons.Default.Person)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopNavigationBar(navController: NavHostController, currentRoute:  String?, onSettingsClick: () -> Unit) {
+fun TopNavigationBar(navController: NavHostController,
+                     currentRoute:  String?,
+                     onSettingsClick: () -> Unit,
+                     onScannerClick: () -> Unit
+) {
     TopAppBar(
         title = {
             Text(
@@ -56,11 +61,26 @@ fun TopNavigationBar(navController: NavHostController, currentRoute:  String?, o
             }
         },
         actions = {
-            IconButton(onClick =  onSettingsClick) {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = "设置"
-                )
+            if (currentRoute != BottomNavigationItem.Profile.route){
+                IconButton(onClick =  onSettingsClick) {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = "设置"
+                    )
+                }
+            }else{
+                IconButton(onClick =  onScannerClick) {
+                    Icon(
+                        imageVector = Icons.Default.QrCodeScanner,
+                        contentDescription = "设置"
+                    )
+                }
+                IconButton(onClick =  onSettingsClick) {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = "设置"
+                    )
+                }
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
