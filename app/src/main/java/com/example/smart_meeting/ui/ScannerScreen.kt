@@ -39,11 +39,13 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import java.util.concurrent.Executors
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.dp
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.BinaryBitmap
 import com.google.zxing.DecodeHintType
@@ -94,7 +96,7 @@ fun ScannerScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            if (hasCameraPermission) {
+            if (!hasCameraPermission) {
                 CameraPreview(
                     onCodeScanned = { code ->
                         viewModel.scannedCode.value = code
@@ -108,6 +110,7 @@ fun ScannerScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text("需要相机权限来扫描二维码")
+                    Spacer(modifier = Modifier.height(16.dp))
                     Button(onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) }) {
                         Text("请求权限")
                     }
