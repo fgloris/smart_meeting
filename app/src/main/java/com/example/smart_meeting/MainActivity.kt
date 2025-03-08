@@ -180,7 +180,7 @@ fun MainScreen() {
                     composable(BottomNavigationItem.Profile.route) { ProfileScreen() }
                     composable(BottomNavigationItem.Scanner.route) { ScannerScreen(
                         onCodeScanned = { result ->
-
+                            println(result)
                         },
                         viewModel = scannerViewModel
                     ) }

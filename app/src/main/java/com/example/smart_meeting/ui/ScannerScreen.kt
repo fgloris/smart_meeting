@@ -88,47 +88,28 @@ fun ScannerScreen(
         }
     }
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize()
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            if (!hasCameraPermission) {
-                CameraPreview(
-                    onCodeScanned = { code ->
-                        viewModel.scannedCode.value = code
-                        onCodeScanned(code)
-                    }
-                )
-            } else {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text("需要相机权限来扫描二维码")
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Button(onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) }) {
-                        Text("请求权限")
-                    }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        if (hasCameraPermission) {
+            CameraPreview(
+                onCodeScanned = { code ->
+                    viewModel.scannedCode.value = code
+                    onCodeScanned(code)
                 }
-            }
-
-            // 扫描成功提示
-            viewModel.scannedCode.value?.let { code ->
-                AlertDialog(
-                    onDismissRequest = { viewModel.scannedCode.value = null },
-                    title = { Text("扫描结果") },
-                    text = { Text(code) },
-                    confirmButton = {
-                        Button(onClick = { viewModel.scannedCode.value = null }) {
-                            Text("确定")
-                        }
-                    }
-                )
+            )
+        } else {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("需要相机权限来扫描二维码")
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) }) {
+                    Text("请求权限")
+                }
             }
         }
     }
@@ -142,6 +123,13 @@ private fun CameraPreview(
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
     val cameraExecutor = remember { Executors.newSingleThreadExecutor() }
+    val reader = MultiFormatReader().apply {
+        setHints(
+            mapOf(
+                DecodeHintType.POSSIBLE_FORMATS to arrayListOf(BarcodeFormat.QR_CODE)
+            )
+        )
+    }
 
     AndroidView(
         modifier = Modifier.fillMaxSize(),
@@ -164,7 +152,7 @@ private fun CameraPreview(
                     .build()
                     .apply {
                         setAnalyzer(cameraExecutor) { imageProxy ->
-                            processImageProxy(imageProxy) { code ->
+                            processImageProxy(imageProxy, reader) { code ->
                                 onCodeScanned(code)
                             }
                         }
@@ -189,16 +177,9 @@ private fun CameraPreview(
 
 private fun processImageProxy(
     imageProxy: ImageProxy,
+    reader: MultiFormatReader,
     onQrCodeScanned: (String) -> Unit
 ) {
-    val reader = MultiFormatReader().apply {
-        setHints(
-            mapOf(
-                DecodeHintType.POSSIBLE_FORMATS to arrayListOf(BarcodeFormat.QR_CODE)
-            )
-        )
-    }
-
     try {
         val buffer = imageProxy.planes[0].buffer
         val data = ByteArray(buffer.remaining())
@@ -219,7 +200,6 @@ private fun processImageProxy(
         val result = reader.decode(binaryBitmap)
         onQrCodeScanned(result.text)
     } catch (e: Exception) {
-        // 解码失败是正常的，不需要特殊处理
     } finally {
         imageProxy.close()
     }
