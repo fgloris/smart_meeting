@@ -30,6 +30,7 @@ sealed class BottomNavigationItem(val route: String, val label: String, val icon
     object Meetings : BottomNavigationItem("meetings", "会议", Icons.Default.AddCircle)
     object Features : BottomNavigationItem("features", "功能", Icons.Default.ViewComfyAlt)
     object Profile : BottomNavigationItem("profile", "我的", Icons.Default.Person)
+    object Scanner : BottomNavigationItem("scanner", "二维码扫描", Icons.Default.QrCodeScanner)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,10 +50,7 @@ fun TopNavigationBar(navController: NavHostController,
         navigationIcon = {
             if (currentIndex == 2) {
                 IconButton(onClick = onNotificationClick) {
-                    Icon(
-                        imageVector = Icons.Default.Notifications,
-                        contentDescription = "用户"
-                    )
+                    Icon(imageVector = Icons.Default.Notifications, contentDescription = "用户")
                 }
             } else {
                 IconButton(onClick = {
@@ -64,34 +62,18 @@ fun TopNavigationBar(navController: NavHostController,
                         restoreState = true
                     }
                 }) {
-                    Icon(
-                        imageVector = Icons.Default.AccountCircle,
-                        contentDescription = "用户"
-                    )
+                    Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "用户")
                 }
             }
         },
         actions = {
             if (currentIndex == 2){
                 IconButton(onClick =  onScannerClick) {
-                    Icon(
-                        imageVector = Icons.Default.QrCodeScanner,
-                        contentDescription = "设置"
-                    )
+                    Icon(imageVector = Icons.Default.QrCodeScanner, contentDescription = "扫描")
                 }
-                IconButton(onClick =  onSettingsClick) {
-                    Icon(
-                        imageVector = Icons.Default.Settings,
-                        contentDescription = "设置"
-                    )
-                }
-            }else{
-                IconButton(onClick =  onSettingsClick) {
-                    Icon(
-                        imageVector = Icons.Default.Settings,
-                        contentDescription = "设置"
-                    )
-                }
+            }
+            IconButton(onClick =  onSettingsClick) {
+                Icon(imageVector = Icons.Default.Settings, contentDescription = "设置")
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(

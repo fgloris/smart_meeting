@@ -30,7 +30,10 @@ import com.example.smart_meeting.screens.SettingsDrawer
 import com.example.smart_meeting.ui.theme.Smart_meetingTheme
 import kotlinx.coroutines.launch
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smart_meeting.screens.NotificationDrawer
+import com.example.smart_meeting.screens.ScannerScreen
+import com.example.smart_meeting.screens.ScannerViewModel
 import kotlin.math.absoluteValue
 
 data class Ref<T>(var value: T)
@@ -51,6 +54,7 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
+    val scannerViewModel: ScannerViewModel = viewModel()
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
 
@@ -122,7 +126,10 @@ fun MainScreen() {
                         }
                     },
                     onScannerClick = {
-
+                        navController.navigate(BottomNavigationItem.Scanner.route){
+                            popUpTo(navController.graph.startDestinationId)
+                            launchSingleTop = true
+                        }
                     }
                 )
             },
@@ -171,6 +178,12 @@ fun MainScreen() {
                     composable(BottomNavigationItem.Meetings.route) { MeetingsScreen() }
                     composable(BottomNavigationItem.Features.route) { FeaturesScreen() }
                     composable(BottomNavigationItem.Profile.route) { ProfileScreen() }
+                    composable(BottomNavigationItem.Scanner.route) { ScannerScreen(
+                        onCodeScanned = { result ->
+
+                        },
+                        viewModel = scannerViewModel
+                    ) }
                 }
             }
         }
