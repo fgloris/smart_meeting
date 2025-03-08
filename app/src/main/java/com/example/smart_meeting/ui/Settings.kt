@@ -39,7 +39,7 @@ fun SettingsDrawer(
                 )
             )
 
-            Divider(modifier = Modifier.padding(vertical = 16.dp))
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
             // 系统设置
             SettingsSection(

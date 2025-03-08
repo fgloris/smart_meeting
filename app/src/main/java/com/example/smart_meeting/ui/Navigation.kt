@@ -37,6 +37,7 @@ sealed class BottomNavigationItem(val route: String, val label: String, val icon
 fun TopNavigationBar(navController: NavHostController,
                      currentIndex: Int,
                      onSettingsClick: () -> Unit,
+                     onNotificationClick: () -> Unit,
                      onScannerClick: () -> Unit
 ) {
     TopAppBar(
@@ -47,8 +48,7 @@ fun TopNavigationBar(navController: NavHostController,
         },
         navigationIcon = {
             if (currentIndex == 2) {
-                IconButton(onClick = {}
-                ) {
+                IconButton(onClick = onNotificationClick) {
                     Icon(
                         imageVector = Icons.Default.Notifications,
                         contentDescription = "用户"

@@ -30,6 +30,7 @@ import com.example.smart_meeting.screens.SettingsDrawer
 import com.example.smart_meeting.ui.theme.Smart_meetingTheme
 import kotlinx.coroutines.launch
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.example.smart_meeting.screens.NotificationDrawer
 import kotlin.math.absoluteValue
 
 data class Ref<T>(var value: T)
@@ -55,6 +56,7 @@ fun MainScreen() {
 
     // 创建共享的页面索引状态
     var currentPageIndex by remember { mutableStateOf(0) }
+    var drawerPageIndex by remember { mutableStateOf(0) }
     val scope = rememberCoroutineScope()
 
     // 页面列表
@@ -69,7 +71,6 @@ fun MainScreen() {
     // 监听导航变化
     LaunchedEffect(navController) {
         navController.currentBackStackEntryFlow.collect { entry ->
-            // 更新currentPageIndex以匹配当前路由
             val route = entry.destination.route
             val index = pages.indexOfFirst { it.route == route }
             if (index != -1) {
@@ -91,10 +92,13 @@ fun MainScreen() {
 
     ModalNavigationDrawer(
         drawerContent = {
-            SettingsDrawer()
+            when (drawerPageIndex){
+                0 -> SettingsDrawer()
+                1 -> NotificationDrawer()
+            }
         },
         drawerState = drawerState,
-        gesturesEnabled = false
+        gesturesEnabled = drawerState.isOpen
     ) {
         Scaffold(
             topBar = {
@@ -102,6 +106,15 @@ fun MainScreen() {
                     navController = navController,
                     currentIndex = currentPageIndex,
                     onSettingsClick = {
+                        drawerPageIndex = 0
+                        scope.launch {
+                            drawerState.apply {
+                                if (isClosed) open() else close()
+                            }
+                        }
+                    },
+                    onNotificationClick = {
+                        drawerPageIndex = 1
                         scope.launch {
                             drawerState.apply {
                                 if (isClosed) open() else close()
