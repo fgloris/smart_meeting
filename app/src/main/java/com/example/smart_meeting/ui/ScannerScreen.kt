@@ -53,6 +53,7 @@ import com.google.zxing.MultiFormatReader
 import com.google.zxing.PlanarYUVLuminanceSource
 import com.google.zxing.common.HybridBinarizer
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.example.smart_meeting.ui.components.ScannerOverlay
 
 class ScannerViewModel : ViewModel() {
     var isScanning by mutableStateOf(false)
@@ -99,6 +100,7 @@ fun ScannerScreen(
                     onCodeScanned(code)
                 }
             )
+            ScannerOverlay()
         } else {
             Column(
                 modifier = Modifier.fillMaxSize(),
