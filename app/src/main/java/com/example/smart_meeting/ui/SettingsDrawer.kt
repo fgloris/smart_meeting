@@ -10,11 +10,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.smart_meeting.ui.settings.SettingScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsDrawer(
-) {
+fun SettingsDrawer(navController: NavController) {
     ModalDrawerSheet(
         modifier = Modifier.fillMaxWidth(0.85f)  // 设置抽屉宽度为屏幕宽度的85%
     ) {
@@ -31,7 +32,7 @@ fun SettingsDrawer(
                     SettingsItem(
                         "个人信息",
                         Icons.Default.Person
-                    ) { /* TODO: 处理个人信息点击 */ },
+                    ) { },
                     SettingsItem(
                         "隐私设置",
                         Icons.Default.Security

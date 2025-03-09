@@ -34,6 +34,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smart_meeting.screens.NotificationDrawer
 import com.example.smart_meeting.screens.ScannerScreen
 import com.example.smart_meeting.screens.ScannerViewModel
+import com.example.smart_meeting.ui.settings.SettingScreen
+import com.example.smart_meeting.ui.settings.SettingsAccountScreen
 import kotlin.math.absoluteValue
 
 data class Ref<T>(var value: T)
@@ -97,7 +99,7 @@ fun MainScreen() {
     ModalNavigationDrawer(
         drawerContent = {
             when (drawerPageIndex){
-                0 -> SettingsDrawer()
+                0 -> SettingsDrawer(navController)
                 1 -> NotificationDrawer()
             }
         },
