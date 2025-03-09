@@ -5,7 +5,8 @@ sealed class SettingScreen(val route: String) {
     object Account : SettingScreen("settings_account")
     object Notification : SettingScreen("settings_notification")
     object Privacy : SettingScreen("settings_privacy")
-    object Security : SettingScreen("settings_security")
+    object Palette : SettingScreen("settings_palette")
     object Language : SettingScreen("settings_language")
     object About : SettingScreen("settings_about")
+    object Help : SettingScreen("settings_help")
 }

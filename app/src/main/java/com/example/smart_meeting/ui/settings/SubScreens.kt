@@ -8,21 +8,26 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SettingsTopBar(title: String, onBackPressed: () -> Unit) {
+    TopAppBar(
+        title = { Text("通知设置") },
+        navigationIcon = {
+            IconButton(onClick = onBackPressed) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回")
+            }
+        },
+        modifier = Modifier.height(100.dp)
+    )
+}
+
 // 账户设置页面
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsAccountScreen(onBackPressed: () -> Unit) {
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("账户信息") },
-                navigationIcon = {
-                    IconButton(onClick = onBackPressed) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回")
-                    }
-                }
-            )
-        }
+        topBar = { SettingsTopBar("账户设置", onBackPressed) }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -40,16 +45,7 @@ fun SettingsAccountScreen(onBackPressed: () -> Unit) {
 @Composable
 fun SettingsNotificationScreen(onBackPressed: () -> Unit) {
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("通知设置") },
-                navigationIcon = {
-                    IconButton(onClick = onBackPressed) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回")
-                    }
-                }
-            )
-        }
+        topBar = { SettingsTopBar("通知设置", onBackPressed) }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -67,16 +63,7 @@ fun SettingsNotificationScreen(onBackPressed: () -> Unit) {
 @Composable
 fun SettingsPrivacyScreen(onBackPressed: () -> Unit) {
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("隐私设置") },
-                navigationIcon = {
-                    IconButton(onClick = onBackPressed) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回")
-                    }
-                }
-            )
-        }
+        topBar = { SettingsTopBar("隐私安全", onBackPressed) }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -84,26 +71,17 @@ fun SettingsPrivacyScreen(onBackPressed: () -> Unit) {
                 .padding(padding)
                 .padding(16.dp)
         ) {
-            Text("隐私设置内容")
+            Text("隐私安全内容")
         }
     }
 }
 
-// 安全设置页面
+// 语言设置页面
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsSecurityScreen(onBackPressed: () -> Unit) {
+fun SettingsPaletteScreen(onBackPressed: () -> Unit) {
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("安全设置") },
-                navigationIcon = {
-                    IconButton(onClick = onBackPressed) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回")
-                    }
-                }
-            )
-        }
+        topBar = { SettingsTopBar("主题设置", onBackPressed) }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -111,7 +89,7 @@ fun SettingsSecurityScreen(onBackPressed: () -> Unit) {
                 .padding(padding)
                 .padding(16.dp)
         ) {
-            Text("安全设置内容")
+            Text("主题设置内容")
         }
     }
 }
@@ -121,16 +99,7 @@ fun SettingsSecurityScreen(onBackPressed: () -> Unit) {
 @Composable
 fun SettingsLanguageScreen(onBackPressed: () -> Unit) {
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("语言设置") },
-                navigationIcon = {
-                    IconButton(onClick = onBackPressed) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回")
-                    }
-                }
-            )
-        }
+        topBar = { SettingsTopBar("语言设置", onBackPressed) }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -148,16 +117,7 @@ fun SettingsLanguageScreen(onBackPressed: () -> Unit) {
 @Composable
 fun SettingsAboutScreen(onBackPressed: () -> Unit) {
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("关于") },
-                navigationIcon = {
-                    IconButton(onClick = onBackPressed) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回")
-                    }
-                }
-            )
-        }
+        topBar = { SettingsTopBar("关于", onBackPressed) }
     ) { padding ->
         Column(
             modifier = Modifier

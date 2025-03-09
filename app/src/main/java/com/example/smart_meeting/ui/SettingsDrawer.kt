@@ -12,13 +12,21 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.smart_meeting.ui.settings.SettingScreen
+import okhttp3.Route
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsDrawer(navController: NavController) {
+fun SettingsDrawer(navController: NavController, onDismiss: () -> Unit) {
     ModalDrawerSheet(
         modifier = Modifier.fillMaxWidth(0.85f)  // 设置抽屉宽度为屏幕宽度的85%
     ) {
+        fun onItemClick(route: String){
+            navController.navigate(route){
+                popUpTo(navController.graph.startDestinationId)
+                launchSingleTop = true
+            }
+            onDismiss()
+        }
 // 设置项列表
         Column(
             modifier = Modifier
@@ -32,11 +40,11 @@ fun SettingsDrawer(navController: NavController) {
                     SettingsItem(
                         "个人信息",
                         Icons.Default.Person
-                    ) { },
+                    ) { onItemClick(SettingScreen.Account.route) },
                     SettingsItem(
                         "隐私设置",
                         Icons.Default.Security
-                    ) { /* TODO: 处理隐私设置点击 */ }
+                    ) { onItemClick(SettingScreen.Privacy.route) }
                 )
             )
 
@@ -49,15 +57,15 @@ fun SettingsDrawer(navController: NavController) {
                     SettingsItem(
                         "通知提醒",
                         Icons.Default.Notifications
-                    ) { /* TODO: 处理通知设置点击 */ },
+                    ) { onItemClick(SettingScreen.Notification.route) },
                     SettingsItem(
                         "主题设置",
                         Icons.Default.Palette
-                    ) { /* TODO: 处理主题设置点击 */ },
+                    ) { onItemClick(SettingScreen.Palette.route) },
                     SettingsItem(
                         "语言设置",
                         Icons.Default.Language
-                    ) { /* TODO: 处理语言设置点击 */ }
+                    ) { onItemClick(SettingScreen.Language.route) }
                 )
             )
 
@@ -70,7 +78,7 @@ fun SettingsDrawer(navController: NavController) {
                     SettingsItem(
                         "版本信息",
                         Icons.Default.Info
-                    ) { /* TODO: 处理版本信息点击 */ },
+                    ) { onItemClick(SettingScreen.About.route) },
                     SettingsItem(
                         "帮助与反馈",
                         Icons.AutoMirrored.Filled.Help

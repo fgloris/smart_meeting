@@ -34,8 +34,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smart_meeting.screens.NotificationDrawer
 import com.example.smart_meeting.screens.ScannerScreen
 import com.example.smart_meeting.screens.ScannerViewModel
-import com.example.smart_meeting.ui.settings.SettingScreen
-import com.example.smart_meeting.ui.settings.SettingsAccountScreen
+import com.example.smart_meeting.ui.settings.*
 import kotlin.math.absoluteValue
 
 data class Ref<T>(var value: T)
@@ -99,7 +98,7 @@ fun MainScreen() {
     ModalNavigationDrawer(
         drawerContent = {
             when (drawerPageIndex){
-                0 -> SettingsDrawer(navController)
+                0 -> SettingsDrawer(navController, { scope.launch { drawerState.close() } })
                 1 -> NotificationDrawer()
             }
         },
@@ -181,11 +180,27 @@ fun MainScreen() {
                     composable(BottomNavigationItem.Features.route) { FeaturesScreen() }
                     composable(BottomNavigationItem.Profile.route) { ProfileScreen() }
                     composable(BottomNavigationItem.Scanner.route) { ScannerScreen(
-                        onCodeScanned = { result ->
-                            println(result)
-                        },
+                        onCodeScanned = { result -> println(result) },
                         viewModel = scannerViewModel
                     ) }
+                    composable(SettingScreen.Account.route) {
+                        SettingsAccountScreen(onBackPressed = { navController.navigateUp(); scope.launch{drawerState.open() }})
+                    }
+                    composable(SettingScreen.Notification.route) {
+                        SettingsNotificationScreen(onBackPressed = { navController.navigateUp(); scope.launch{drawerState.open() }})
+                    }
+                    composable(SettingScreen.Privacy.route) {
+                        SettingsPrivacyScreen(onBackPressed = { navController.navigateUp(); scope.launch{drawerState.open() }})
+                    }
+                    composable(SettingScreen.Palette.route) {
+                        SettingsPaletteScreen(onBackPressed = { navController.navigateUp(); scope.launch{drawerState.open() }})
+                    }
+                    composable(SettingScreen.Language.route) {
+                        SettingsLanguageScreen(onBackPressed = { navController.navigateUp(); scope.launch{drawerState.open() }})
+                    }
+                    composable(SettingScreen.About.route) {
+                        SettingsAboutScreen(onBackPressed = { navController.navigateUp(); scope.launch{drawerState.open() }})
+                    }
                 }
             }
         }
