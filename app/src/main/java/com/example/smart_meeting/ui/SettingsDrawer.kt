@@ -12,7 +12,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.smart_meeting.ui.settings.SettingScreen
-import okhttp3.Route
+import androidx.compose.ui.res.stringResource
+import com.example.smart_meeting.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,11 +39,11 @@ fun SettingsDrawer(navController: NavController, onDismiss: () -> Unit) {
                 title = "账号设置",
                 items = listOf(
                     SettingsItem(
-                        "个人信息",
+                        stringResource(id = R.string.setting_personal_name),
                         Icons.Default.Person
                     ) { onItemClick(SettingScreen.Account.route) },
                     SettingsItem(
-                        "隐私设置",
+                        stringResource(id = R.string.setting_security_name),
                         Icons.Default.Security
                     ) { onItemClick(SettingScreen.Privacy.route) }
                 )
@@ -55,17 +56,13 @@ fun SettingsDrawer(navController: NavController, onDismiss: () -> Unit) {
                 title = "系统设置",
                 items = listOf(
                     SettingsItem(
-                        "通知提醒",
+                        stringResource(id = R.string.setting_notification_name),
                         Icons.Default.Notifications
                     ) { onItemClick(SettingScreen.Notification.route) },
                     SettingsItem(
-                        "主题设置",
+                        stringResource(id = R.string.setting_palette_name),
                         Icons.Default.Palette
                     ) { onItemClick(SettingScreen.Palette.route) },
-                    SettingsItem(
-                        "语言设置",
-                        Icons.Default.Language
-                    ) { onItemClick(SettingScreen.Language.route) }
                 )
             )
 
@@ -76,13 +73,13 @@ fun SettingsDrawer(navController: NavController, onDismiss: () -> Unit) {
                 title = "关于",
                 items = listOf(
                     SettingsItem(
-                        "版本信息",
+                        stringResource(id = R.string.setting_info_name),
                         Icons.Default.Info
                     ) { onItemClick(SettingScreen.About.route) },
                     SettingsItem(
-                        "帮助与反馈",
+                        stringResource(id = R.string.setting_help_name),
                         Icons.AutoMirrored.Filled.Help
-                    ) { /* TODO: 处理帮助与反馈点击 */ }
+                    ) { onItemClick(SettingScreen.Help.route) }
                 )
             )
         }

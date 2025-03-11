@@ -195,11 +195,11 @@ fun MainScreen() {
                     composable(SettingScreen.Palette.route) {
                         SettingsPaletteScreen(onBackPressed = { navController.navigateUp(); scope.launch{drawerState.open() }})
                     }
-                    composable(SettingScreen.Language.route) {
-                        SettingsLanguageScreen(onBackPressed = { navController.navigateUp(); scope.launch{drawerState.open() }})
-                    }
                     composable(SettingScreen.About.route) {
                         SettingsAboutScreen(onBackPressed = { navController.navigateUp(); scope.launch{drawerState.open() }})
+                    }
+                    composable(SettingScreen.Help.route) {
+                        SettingsHelpScreen(onBackPressed = { navController.navigateUp(); scope.launch{drawerState.open() }})
                     }
                 }
             }

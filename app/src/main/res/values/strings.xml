@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">智能会议</string>
+    <string name="meeting_screen_name">会议</string>
+    <string name="feature_screen_name">功能</string>
+    <string name="profile_screen_name">我的</string>
+    <string name="setting_personal_name">个人信息</string>
+    <string name="setting_security_name">安全设置</string>
+    <string name="setting_notification_name">通知设置</string>
+    <string name="setting_language_name">语言设置</string>
+    <string name="setting_palette_name">主题设置</string>
+    <string name="setting_info_name">版本信息</string>
+    <string name="setting_help_name">帮助</string>
 </resources>
