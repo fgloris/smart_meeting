@@ -68,4 +68,5 @@ dependencies {
     implementation(libs.zxing.android.embedded)
     implementation(libs.core)
     implementation(libs.okhttp)
+    implementation(libs.qrcode.kotlin)
 }

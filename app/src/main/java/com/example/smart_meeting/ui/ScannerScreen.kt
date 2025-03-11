@@ -201,7 +201,7 @@ private fun processImageProxy(
         val binaryBitmap = BinaryBitmap(HybridBinarizer(source))
         val result = reader.decode(binaryBitmap)
         onQrCodeScanned(result.text)
-    } catch (e: Exception) {
+    } catch (_: Exception) {
     } finally {
         imageProxy.close()
     }

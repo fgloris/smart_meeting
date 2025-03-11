@@ -1,5 +1,6 @@
 package com.example.smart_meeting.screens
 
+import UserInfoViewModel
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
@@ -24,10 +25,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.activity.viewModels
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen() {
+    val userInfoViewModel: UserInfoViewModel by viewModels()
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -114,13 +117,13 @@ fun ProfileScreen() {
                         .fillMaxWidth()
                         .padding(16.dp)
                 ) {
-                    ProfileInfoItem(title = "邮箱", content = "user@example.com")
+                    ProfileInfoItem(title = "邮箱", content = userInfoViewModel.email)
                     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                    ProfileInfoItem(title = "手机", content = "+86 123****5678")
+                    ProfileInfoItem(title = "手机", content = userInfoViewModel.phoneNumber.toString())
                     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                    ProfileInfoItem(title = "部门", content = "研发部")
+                    ProfileInfoItem(title = "部门", content = userInfoViewModel.department)
                     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                    ProfileInfoItem(title = "职位", content = "软件工程师")
+                    ProfileInfoItem(title = "职位", content = userInfoViewModel.position)
                 }
             }
         }
