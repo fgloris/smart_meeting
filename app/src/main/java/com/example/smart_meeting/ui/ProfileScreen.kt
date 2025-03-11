@@ -29,8 +29,10 @@ import androidx.activity.viewModels
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen() {
-    val userInfoViewModel: UserInfoViewModel by viewModels()
+fun ProfileScreen(
+    userInfoViewModel: UserInfoViewModel,
+    onEditProfile: () -> Unit,
+) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()

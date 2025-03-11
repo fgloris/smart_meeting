@@ -20,6 +20,15 @@ class UserInfoViewModel: ViewModel(){
     private fun getUserCode(): String {
         return ""
     }
+
+    fun getFullName(): String {
+        if ((firstName+lastName).any { char -> (char.code in 65..90) || (char.code in 97..122) }){
+            return "$lastName $firstName"
+        }else{
+            return firstName+lastName
+        }
+    }
+
     fun encode(): QRCodeGraphics {
         val code = getUserCode()
         val raw = "first:$firstName;last:$lastName;code:$code";
