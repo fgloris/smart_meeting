@@ -1,5 +1,6 @@
 package com.example.smart_meeting
 
+import UserInfoViewModel
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -55,6 +56,7 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
+    val userInfoViewModel: UserInfoViewModel = viewModel();
     val scannerViewModel: ScannerViewModel = viewModel()
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -178,7 +180,7 @@ fun MainScreen() {
                 ) {
                     composable(BottomNavigationItem.Meetings.route) { MeetingsScreen() }
                     composable(BottomNavigationItem.Features.route) { FeaturesScreen() }
-                    composable(BottomNavigationItem.Profile.route) { ProfileScreen() }
+                    composable(BottomNavigationItem.Profile.route) { ProfileScreen(userInfoViewModel, {}) }
                     composable(BottomNavigationItem.Scanner.route) { ScannerScreen(
                         onCodeScanned = { result -> println(result) },
                         viewModel = scannerViewModel

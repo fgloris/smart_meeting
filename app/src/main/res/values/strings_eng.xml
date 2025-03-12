@@ -10,6 +10,4 @@
     <string name="setting_palette_name">主题设置</string>
     <string name="setting_info_name">版本信息</string>
     <string name="setting_help_name">帮助</string>
-    <string name="welcome_label_name">欢迎！ </string>
-    <string name="login_btn_name">登陆/注册</string>
 </resources>

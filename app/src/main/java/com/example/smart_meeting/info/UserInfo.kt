@@ -8,14 +8,15 @@ import qrcode.render.QRCodeGraphics
 import java.nio.ByteBuffer
 
 class UserInfoViewModel: ViewModel(){
-    val firstName by mutableStateOf("")
-    val lastName by mutableStateOf("")
+    var reginstered by mutableStateOf(false)
+    var firstName by mutableStateOf("游客")
+    var lastName by mutableStateOf("")
     val profile by mutableStateOf(ByteBuffer.allocate(10000))
     var age by mutableStateOf(0)
     val phoneNumber by mutableStateOf(PhoneNumber(86,0))
-    val email by mutableStateOf("")
-    val department by mutableStateOf("")
-    val position by mutableStateOf("")
+    var email by mutableStateOf("")
+    var department by mutableStateOf("")
+    var position by mutableStateOf("")
 
     private fun getUserCode(): String {
         return ""
@@ -23,9 +24,9 @@ class UserInfoViewModel: ViewModel(){
 
     fun getFullName(): String {
         if ((firstName+lastName).any { char -> (char.code in 65..90) || (char.code in 97..122) }){
-            return "$lastName $firstName"
+            return "$firstName $lastName"
         }else{
-            return firstName+lastName
+            return lastName+firstName
         }
     }
 
@@ -43,8 +44,8 @@ class UserInfoViewModel: ViewModel(){
 }
 
 class PhoneNumber(
-    val countryCode: Int,
-    val number: Int
+    var countryCode: Int,
+    var number: Long
 ){
     override fun toString(): String {
         return "+$countryCode $number";
